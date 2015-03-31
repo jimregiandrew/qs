@@ -4,7 +4,7 @@ Specify a file format for representing numeric (and enumerated) data where:
 
 1. The file is self describing.
 2. The file size is compact (within 2:1 of a powerful compression method)
-3. The format handles one-dimensional and multi-dimensional data, that is typically a function of time.
+3. The format handles one-dimensional and multi-dimensional functions of time (or sequences).
 4. The format can be generated and decoded on an embedded device.
 
 By self describing we mean it defines the data contained therein: name, unit, precision (quantization). As well as giving the actual data.
@@ -13,11 +13,11 @@ visualize the data (e.g. graph it).
 
 The idea is that sensors can send tnz "snippets" of data that anyone can decode and understand, and these snippets can be stored and served from DB's natively.
 
-Examples (start time is given for all examples)
+Examples (All define a time period for which the data is applicable)
 --------
 1. example1.tnz: contains the latitude, longitude, speed, distance travelled, fuel used, rpm, and (3-dimensional) acceleration values every second for a vehicle.
 2. example2.tnz: contains the latitude, longitude and temperature reading for a cargo, every 30 seconds.
-3. example3.tnz. contains the lateral, medial and vertical acceleration values every millisecond encompassing the period with an impact.
+3. example3.tnz. contains the lateral, medial and vertical acceleration values every millisecond encompassing a period with an (vehicular) impact.
 4. example4.tnz: contains NOX ppm every minute.
-5. example5.tnz: engine parameters at different intervals.
+5. example5.tnz: contains engine parameters for a vehicle, where each parameter has a different update interval.
 
