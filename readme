@@ -21,3 +21,11 @@ Examples (All define a time period for which the data is applicable)
 4. example4.tnz: contains NOX ppm every minute.
 5. example5.tnz: contains engine parameters for a vehicle, where each parameter has a different update interval.
 
+See also
+--------
+1. tnz search in my gmail.
+2. Hierarchical Data Format
+3. uca.ntop.org/tsdb.pdf
+4. http://northstar-www.dartmouth.edu/doc/idl/html_6.2/Scientific_Data_Formats_Overview.html
+
+
