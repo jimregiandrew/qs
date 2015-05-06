@@ -28,7 +28,7 @@ public:
 	BitSink(std::shared_ptr<ByteSink> byteSink);
 	~BitSink();
 
-	void receive(register uint32_t code, int size);
+	void receive(uint32_t code, int size);
 	void flush();
 	void close();
 

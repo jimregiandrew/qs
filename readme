@@ -1,25 +1,59 @@
+Remember
+--------
+Just a proof of concept. Keep it simple.
+
+Intro
+-----
+Specify a file format for representing numeric (and enumerated) data sequences, also known as time-series or digital data. The following examples
+are all a function of time, although this is not necessary.
+
+1. example1.tnz: contains the latitude, longitude, speed, distance travelled, fuel used, rpm, and (3-dimensional) acceleration values every second for a vehicle.
+2. example2.tnz: contains the latitude, longitude and temperature reading for a refreigerated cargo, every 30 seconds.
+3. example3.tnz. contains the lateral, medial and vertical acceleration values every millisecond encompassing a period with an (vehicular) impact.
+4. example4.tnz: contains NOX ppm every minute.
+5. example5.tnz: contains engine parameters for a vehicle, where each parameter has a different update interval.
+
+Other examples are
+
+- Daily Mood diary parameters
+- Historical stock market prices
+- Data logger data
+
+The applications are endless.
+
 Goal
 ----
-Specify a file format for representing numeric (and enumerated) data where:
 
-1. The file is self describing.
-2. The file size is compact (within 2:1 of a powerful compression method)
-3. The format handles one-dimensional and multi-dimensional functions of time (or sequences).
-4. The format can be generated and decoded on an embedded device.
+To have a file format that:
+
+1. is self describing.
+2. is compact (A random goal: within 2:1 of the best known compression method)
+3. handles one-dimensional and multi-dimensional functions of time (or sequences).
+4. can be generated and decoded on an embedded device.
+5. can be configured with different levels of loss (i.e. trade compression for file size).
 
 By self describing we mean it defines the data contained therein: name, unit, precision (quantization). As well as giving the actual data.
 The JFIF for JPEG is an example of a self-describing file in this regard. Self describing allows an application to decode a tnz file and to 
 visualize the data (e.g. graph it).
 
-The idea is that sensors can send tnz "snippets" of data that anyone can decode and understand, and these snippets can be stored and served from DB's natively.
+We want a format that allows a human to be able to inspect the data (e.g. in a graphing tool) and understand it. We want a format that, 
+as much as possible, allow programs to understand the data.
 
-Examples (All define a time period for which the data is applicable)
---------
-1. example1.tnz: contains the latitude, longitude, speed, distance travelled, fuel used, rpm, and (3-dimensional) acceleration values every second for a vehicle.
-2. example2.tnz: contains the latitude, longitude and temperature reading for a cargo, every 30 seconds.
-3. example3.tnz. contains the lateral, medial and vertical acceleration values every millisecond encompassing a period with an (vehicular) impact.
-4. example4.tnz: contains NOX ppm every minute.
-5. example5.tnz: contains engine parameters for a vehicle, where each parameter has a different update interval.
+The idea is that sensors can send tnz "snippets" of data that anyone can decode and understand, and these snippets can be stored and served from DB's (natively).
+
+Don't we have this already
+--------------------------
+I don't know. I haven't found such a format yet. The closest is HDF. From what I can see it is targeted at scientific data where precision and volume is important.
+What I want is
+
+1. A standard format I can load and decode in a browser just like JPEG (EXIF or JFIF) can be: e.g. via an AJAX call
+2. A compact format so I don't have to send lots of data (think mobile or any bandlimited network).
+3. A format that is not encumbered with intellectual property (patents)
+4. A relatively simple format that can be encoded/decoded on an embedded device. More complicated encodings are fine, as long as not necessary and the decoding is relatively simple.
+
+It really just a file interchange format - defining the meaning of the data contained therein.
+
+The applications are endless.
 
 See also
 --------
@@ -27,5 +61,4 @@ See also
 2. Hierarchical Data Format
 3. uca.ntop.org/tsdb.pdf
 4. http://northstar-www.dartmouth.edu/doc/idl/html_6.2/Scientific_Data_Formats_Overview.html
-
 

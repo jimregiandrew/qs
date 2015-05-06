@@ -26,7 +26,7 @@ BitSink::~BitSink()
 	flush();
 }
 
-void BitSink::receive(register uint32_t code, int size)
+void BitSink::receive(uint32_t code, int size)
 {
 	assert(size > 0 && size <= 32);
 
