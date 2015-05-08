@@ -1,7 +1,7 @@
 # http://www.puxan.com/web/blog/HowTo-Write-Generic-Makefiles
 # Declaration of variables
 CC = g++
-CC_FLAGS = -Wall -Wextra --std=c++0x -g
+CC_FLAGS = -Wall -Wextra --std=c++0x -g -D_GLIBCXX_DEBUG
 
 # File names
 EXEC = test

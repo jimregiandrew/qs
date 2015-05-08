@@ -15,6 +15,17 @@ namespace tnz {
 
 class ByteSource;
 
+/*
+ * BitSource
+ *
+ * A cache of the next bytes in the bitstream are stored in byteBuf. A cache of the next (up to 32)
+ * bits in the bitstream are (also) stored in bitBuf. The bits are stored
+ * in order from the msb in bitBuf: that is the 0th (next) bit in the bitstream
+ * is in the msb of bifBuf, the 1st bit in msb-1, the 2nd bit in msb-2 etc.
+ * byteOffset is a pointer into byteBuf to the first (remaining) byte in byteBuf and endOffset
+ * one past the last byte. bitOffset is a pointer to the first (remaining) bit in the first byte
+ * (byteOffset in byteBuf) - noting some bits in this byte may be stale - that is already consumed.
+ */
 class BitSource
 {
 public:
@@ -27,7 +38,7 @@ public:
         if (size == 0)
             return 0;
         else
-            return bitBuf >> (32-size);
+            return bitBuf >> (32-size); // Next bit is bit 31 (the msb)
     }
 	void consume(int numBits);
 
@@ -38,18 +49,20 @@ private:
             (((uint32_t)byteBuf[byteOffset]   << 24) |
              ((uint32_t)byteBuf[byteOffset+1] << 16) |
              ((uint32_t)byteBuf[byteOffset+2] <<  8) |
-              (uint32_t)byteBuf[byteOffset+3]) << bitOffset;
+              (uint32_t)byteBuf[byteOffset+3] <<  0) << bitOffset;
     }
     void getBytes();
+    void rotateRemainingBytes();
 
 private:
 	std::shared_ptr<ByteSource> byteSource;
-	std::vector<uint8_t> byteBuf;
-    uint32_t bitBuf;
-    int bitOffset;
-    int availableBits;
-    int byteOffset;  // Start of used part of byteBuf
-    int bufferLen;     // Amount of data in the byteBuf. Used length is bufferLen - byteOffset.
+	std::vector<uint8_t> byteBuf; // byte buffer
+    uint32_t bitBuf;   // 4 byte cache of next bits
+    int bitOffset;     // Offset of the next bit in the first byte in byteBuf
+    int availableBits; // Number of bits left in bitstream
+    int byteOffset;    // Pointer to first (current) byte in byteBuf
+    int endOffset;     // Pointer to one past the last byte in byteBuf
+    // (i.e. byteBuf[byteOffset], byteBuf[byteOffset+1],.., byteBuf[endOffset-1] are the current bytes in byteBuf
 };
 
 class ByteSource

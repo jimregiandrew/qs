@@ -62,3 +62,11 @@ See also
 3. uca.ntop.org/tsdb.pdf
 4. http://northstar-www.dartmouth.edu/doc/idl/html_6.2/Scientific_Data_Formats_Overview.html
 
+Techincal notes
+---------------
+Bits are written to bytes msb first. That is the first bit output will be written to the msb (bit 7) of the first byte,
+the next bit written to bit 6 of the first byte and so on. When the first byte is filled bits are written to the second
+byte, starting with the msb. And so on. Bits are thus ordered according to byte output first and then within bytes according
+to msb to lsb order.
+
+For decoding we obviously need to extarct the bits in reverse order to that written.

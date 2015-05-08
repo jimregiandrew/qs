@@ -118,10 +118,11 @@ TEST_CASE( "Huffman", "[huffman]" ) {
     	tnz::HuffmanTable huffTable = { {0, 1, 0, 3}, {0, 1, 2, 3} };
     	BitSink bitSink(byteSink);
     	HuffmanCoder huffCoder(huffTable);
-    	huffCoder.code(bitSink, 0);
-    	huffCoder.code(bitSink, 1);
-    	huffCoder.code(bitSink, 2);
-    	huffCoder.code(bitSink, 3);
+    	huffCoder.code(bitSink, 0); // Code 0
+    	huffCoder.code(bitSink, 1); // Code 100
+    	huffCoder.code(bitSink, 2); // Code 101
+    	huffCoder.code(bitSink, 3); // Code 110
+    	// Output is then 01001011 | 10. Padding with 1's 01001011 | 10111111 = 0x4B 0xBF
     	bitSink.close();
 
     	const std::vector<uint8_t> code = byteSink->getBuf();
@@ -129,18 +130,20 @@ TEST_CASE( "Huffman", "[huffman]" ) {
     	REQUIRE(code[0] == 0x4B);
     	REQUIRE(code[1] == 0xBF);
 
-//    	shared_ptr<tnz::ByteBuffer> byteSource(new tnz::ByteBuffer(byteSink->getBuf()));
-//    	tnz::BitSource bitSource(byteSource);
-//    	tnz::HuffmanDecoder huffDecoder(huffTable);
-//    	int sym = 0;
-//    	sym = huffDecoder.decodeSymbol(bitSource);
-//    	REQUIRE(sym == 0);
-//    	sym = huffDecoder.decodeSymbol(bitSource);
-//    	REQUIRE(sym == 1);
-//    	sym = huffDecoder.decodeSymbol(bitSource);
-//    	REQUIRE(sym == 2);
-//    	sym = huffDecoder.decodeSymbol(bitSource);
-//    	REQUIRE(sym == 3);
+    	shared_ptr<tnz::ByteBuffer> byteSource(new tnz::ByteBuffer(byteSink->getBuf()));
+    	tnz::BitSource bitSource(byteSource);
+    	tnz::HuffmanDecoder huffDecoder(huffTable);
+    	int sym = 0;
+    	sym = huffDecoder.decodeSymbol(bitSource);
+    	REQUIRE(sym == 0);
+    	sym = huffDecoder.decodeSymbol(bitSource);
+    	REQUIRE(sym == 1);
+    	sym = huffDecoder.decodeSymbol(bitSource);
+    	REQUIRE(sym == 2);
+    	sym = huffDecoder.decodeSymbol(bitSource);
+    	REQUIRE(sym == 3);
+    	int availBits = bitSource.getAvailableBits();
+    	REQUIRE(availBits == 6);
     }
 }
 
