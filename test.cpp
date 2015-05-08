@@ -1,5 +1,5 @@
 /*
- * g++ --std=c++0x -o test test.cpp BitSink.cpp
+ * g++ --std=c++0x -o test test.cpp BitSink.cpp tnz_BitSource.cpp HuffmanCoder.cpp HuffmanDecoder.cpp HuffmanTable.cpp
  */
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 #include "catch.hpp"
@@ -17,6 +17,11 @@
 //}
 
 #include "BitSink.h"
+#include "tnz_BitSource.h"
+#include "HuffmanTable.h"
+#include "HuffmanCoder.h"
+#include "HuffmanDecoder.h"
+
 #include <memory>
 #include <vector>
 
@@ -52,20 +57,7 @@ private:
 //
 //	}
 //}
-
-TEST_CASE( "BitSink", "[bitsink]" ) {
-	shared_ptr<TestingByteSink> testingByteSink(new TestingByteSink);
-	BitSink bitSink(testingByteSink);
-
-    SECTION( "Simple bit sink test" ) {
-    	vector<uint8_t> shouldBe(1, (uint8_t)0xff);
-    	bitSink.receive(0xff, 8);
-    	bitSink.flush();
-    	vector<uint8_t> buf = testingByteSink->getBuf();
-    	REQUIRE(buf == shouldBe);
-    }
-
-    // Implement this when have done Huffman decoding - want a getBits function
+// Implement this when have done Huffman decoding - want a getBits function
 //	SECTION( "Random data, random bit size output" ) {
 //		static const int SIZE=1024;
 //		vector<uint8_t> data;
@@ -84,7 +76,19 @@ TEST_CASE( "BitSink", "[bitsink]" ) {
 //		REQUIRE(testingByteSink->getBuf() == data);
 //	}
 
-    SECTION( "Simple bit sink test" ) {
+TEST_CASE( "BitSink", "[bitsink]" ) {
+	shared_ptr<TestingByteSink> testingByteSink(new TestingByteSink);
+	BitSink bitSink(testingByteSink);
+
+    SECTION( "Simple bit sink test 1" ) {
+    	vector<uint8_t> shouldBe(1, (uint8_t)0xff);
+    	bitSink.receive(0xff, 8);
+    	bitSink.flush();
+    	vector<uint8_t> buf = testingByteSink->getBuf();
+    	REQUIRE(buf == shouldBe);
+    }
+
+    SECTION( "Simple bit sink test 2" ) {
     	// Notes bits are pushed into a byte at byte 0 - i.e. first bit goes into byte 0.
     	vector<uint8_t> shouldBe = {0x00, 0x01, 0x02, 0x5A};
     	bitSink.receive(0x00, 8);
@@ -101,6 +105,42 @@ TEST_CASE( "BitSink", "[bitsink]" ) {
     	bitSink.flush();
     	vector<uint8_t> buf = testingByteSink->getBuf();
     	REQUIRE(buf == shouldBe);
+    }
+}
+
+TEST_CASE( "Huffman", "[huffman]" ) {
+
+	shared_ptr<ByteBufferSink> byteSink(new ByteBufferSink());
+
+	SECTION( "Simple huffman coding test" ) {
+    	// Huffman code with 1 code of length 1 bit and 4 codes of length 3.
+    	// Symbols are 0,1,..4 (i.e. symbols (also) ordered according to code word length and order
+    	tnz::HuffmanTable huffTable = { {0, 1, 0, 3}, {0, 1, 2, 3} };
+    	BitSink bitSink(byteSink);
+    	HuffmanCoder huffCoder(huffTable);
+    	huffCoder.code(bitSink, 0);
+    	huffCoder.code(bitSink, 1);
+    	huffCoder.code(bitSink, 2);
+    	huffCoder.code(bitSink, 3);
+    	bitSink.close();
+
+    	const std::vector<uint8_t> code = byteSink->getBuf();
+    	REQUIRE(code.size() == 2);
+    	REQUIRE(code[0] == 0x4B);
+    	REQUIRE(code[1] == 0xBF);
+
+//    	shared_ptr<tnz::ByteBuffer> byteSource(new tnz::ByteBuffer(byteSink->getBuf()));
+//    	tnz::BitSource bitSource(byteSource);
+//    	tnz::HuffmanDecoder huffDecoder(huffTable);
+//    	int sym = 0;
+//    	sym = huffDecoder.decodeSymbol(bitSource);
+//    	REQUIRE(sym == 0);
+//    	sym = huffDecoder.decodeSymbol(bitSource);
+//    	REQUIRE(sym == 1);
+//    	sym = huffDecoder.decodeSymbol(bitSource);
+//    	REQUIRE(sym == 2);
+//    	sym = huffDecoder.decodeSymbol(bitSource);
+//    	REQUIRE(sym == 3);
     }
 }
 

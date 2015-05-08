@@ -29,18 +29,22 @@ namespace tnz {
  * HuffmanTable
  *
  * We use a Canonical Huffman symbol representation to describe the Huffman symbol.
+ * See e.g. http://en.wikipedia.org/wiki/Canonical_Huffman_code.
  * This has an advantage in that the Huffman table can be stored compactly
  * (the same that is used in JPEG). Specifically, numCodes[i] stores the
- * number of codes of length i, and symbol[n] is the nth symbol, where the symbols are
- * ordered according to symbol "value". A symbol's "value" is the unsigned binary number
- * defined by its bit pattern. (Note that shorter codes have a lower
- * value than longer codes).
+ * number of codes of length i (i=1,2,..,HUFF_MAX_CODE_LENGTH), and symbol[n] is the nth symbol
+ * (n=0,1,..,HUFF_MAX_NUMBER_SYMBOLS-1), where the symbols are ordered according to
+ * symbols code "value". A symbol's code "value" is the unsigned binary number defined by its
+ * code's bit pattern. (Note that shorter codes have a lower value than longer codes).
  */
 struct HuffmanTable
 {
     uint8_t numCodes[HUFF_MAX_CODE_LENGTH + 1];
-    int     symbol[HUFF_MAX_NUMBER_SYMBOLS];
+    uint8_t symbol[HUFF_MAX_NUMBER_SYMBOLS];
+    //ToDo: look for type errors because I had symbol as array of int (and not uint8_t).
 };
+
+int makeCodeAndLengthTables(int *huffCode, uint8_t *huffCodeLen, const HuffmanTable& huffTable);
 
 inline bool operator == (const HuffmanTable& lhs,  const HuffmanTable& rhs)
 {

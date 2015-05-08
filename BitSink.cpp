@@ -46,9 +46,11 @@ void BitSink::receive(uint32_t code, int size)
 
 void BitSink::flush()
 {
-    byteTally += queuedBytes;
-    out->receive((const uint8_t*)byteBuf, queuedBytes);
-    queuedBytes = 0;
+	if (queuedBytes > 0) {
+		byteTally += queuedBytes;
+		out->receive((const uint8_t*)byteBuf, queuedBytes);
+		queuedBytes = 0;
+	}
 }
 
 void BitSink::emitByte(uint8_t c)
@@ -56,6 +58,12 @@ void BitSink::emitByte(uint8_t c)
     byteBuf[queuedBytes++] = c;
     if (queuedBytes == sizeof(byteBuf))
         flush();
+}
+
+void BitSink::close()
+{
+	receive(0xFF, 8 - queuedBits);
+	flush();
 }
 
 }
