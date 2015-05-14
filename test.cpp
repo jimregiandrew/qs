@@ -21,6 +21,7 @@
 #include "HuffmanTable.h"
 #include "HuffmanCoder.h"
 #include "HuffmanDecoder.h"
+#include "Modeller.h"
 
 #include <memory>
 #include <vector>
@@ -145,6 +146,64 @@ TEST_CASE( "Huffman", "[huffman]" ) {
     	int availBits = bitSource.getAvailableBits();
     	REQUIRE(availBits == 6);
     }
+
+	SECTION( "Kraft inequality" ) {
+		{
+			tnz::HuffmanTable huffTable = { {0, 1, 0, 3}, {0, 1, 2, 3} };
+			int maxCodeLen = 3;
+			uint32_t ksum = kraftSum(huffTable.numCodes, maxCodeLen);
+			REQUIRE(ksum == (1 << maxCodeLen) - 1);
+		}
+		{
+			tnz::HuffmanTable huffTable = { {0, 1, 0, 4}, {0, 1, 2, 3, 4} };
+			int maxCodeLen = 3;
+			uint32_t ksum = kraftSum(huffTable.numCodes, maxCodeLen);
+			REQUIRE(ksum == (1 << maxCodeLen));
+		}
+	}
+
+	SECTION( "magnitude bits" ) {
+		{
+			tnz::Model model = getMagBitsModel(0);
+			tnz::Model shouldBe = Model{0,0,0};
+			REQUIRE(model == shouldBe);
+		}
+		{
+			tnz::Model model = getMagBitsModel(1);
+			tnz::Model shouldBe = Model{1,1,1};
+			REQUIRE(model == shouldBe);
+		}
+		{
+			tnz::Model model = getMagBitsModel(-1);
+			tnz::Model shouldBe = Model{1,1,-2}; // bits = 0b
+			REQUIRE(model == shouldBe);
+		}
+		{
+			tnz::Model model = getMagBitsModel(2);
+			tnz::Model shouldBe = Model{2,2,2}; // bits = 10b = 2
+			REQUIRE(model == shouldBe);
+		}
+		{
+			tnz::Model model = getMagBitsModel(3);
+			tnz::Model shouldBe = Model{2,2,3}; // bits = 11b = 3
+			REQUIRE(model == shouldBe);
+		}
+		{
+			tnz::Model model = getMagBitsModel(-2);
+			tnz::Model shouldBe = Model{2,2,-3}; // bits = 01b = 1
+			REQUIRE(model == shouldBe);
+		}
+		{
+			tnz::Model model = getMagBitsModel(-3);
+			tnz::Model shouldBe = Model{2,2,-4}; // bits = -100 = 2
+			REQUIRE(model == shouldBe);
+		}
+		{
+			tnz::Model model = getMagBitsModel(0xabcd);
+			tnz::Model shouldBe = Model{16,16,0xabcd}; // bits = 0xabcd
+			REQUIRE(model == shouldBe);
+		}
+	}
 }
 
 } // namespace tnz

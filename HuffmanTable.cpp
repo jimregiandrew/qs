@@ -70,4 +70,13 @@ int makeCodeAndLengthTables(int *huffCode, uint8_t *huffCodeLen, const HuffmanTa
     return numSymbols;
 }
 
+uint32_t kraftSum(const uint8_t* numCodes, int maxCodeLen)
+{
+	uint32_t sum = 0;
+	for (int n = 1; n <= maxCodeLen; ++n) {
+		sum += numCodes[n] * (1 << (maxCodeLen - n));
+	}
+	return sum;
+}
+
 } // namespace tnz

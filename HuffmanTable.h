@@ -46,6 +46,10 @@ struct HuffmanTable
 
 int makeCodeAndLengthTables(int *huffCode, uint8_t *huffCodeLen, const HuffmanTable& huffTable);
 
+// Returns Kraft sum of code lengths, shifted left by maxCodeLen
+// kraftSum <= 1 << maxCodeLen is then the Kraft inequality.
+uint32_t kraftSum(const uint8_t* numCodes, int maxCodeLen);
+
 inline bool operator == (const HuffmanTable& lhs,  const HuffmanTable& rhs)
 {
     for (unsigned int n = 1; n <= HUFF_MAX_CODE_LENGTH; n++) {
