@@ -19,7 +19,7 @@ namespace tnz {
 class BitStream;
 
 struct Model {
-	uint8_t symbol;
+	int symbol;
 	int nBits;
 	int bits;
 };

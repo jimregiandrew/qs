@@ -14,14 +14,12 @@ HuffmanDecoder::HuffmanDecoder(const HuffmanTable& huffTable)
 }
 
 /*
- * decodeSymbol
+ * decode
  *
  * Decodes a symbol from bitSource, removing the decoded bits.
  */
-int HuffmanDecoder::decodeSymbol(BitSource& bitSource)
+int HuffmanDecoder::decode(BitSource& bitSource)
 {
-    register int numBits;
-    register int look;
 
     /*
      * Try to do a lookup decoding, and if this fails use the slower (but
@@ -31,12 +29,22 @@ int HuffmanDecoder::decodeSymbol(BitSource& bitSource)
     if (avail == 0)
         return HUFF_NEED_MORE_BITS;
 
+    register int numBits = 0;
+    register int look = 0;
     if (avail >= HUFF_LOOKAHEAD) {
         look = bitSource.peek(HUFF_LOOKAHEAD);
         numBits = numBitsLut[look];
     }
-    if (numBits == 0) // avail < HUFF_LOOKAHEAD or numBitsLut[look] = 0
-        return decodeLongCode(bitSource);
+    if (numBits == 0) { // avail < HUFF_LOOKAHEAD or numBitsLut[look] = 0
+    	if (avail <= HUFF_LOOKAHEAD) {
+    		look = bitSource.peek(avail);
+    		look <<= (HUFF_LOOKAHEAD - avail); // Fill with zeros from right, could fill with 1's
+            numBits = numBitsLut[look];
+    	}
+    	else {
+    		return decodeLongCode(bitSource);
+    	}
+    }
 
     // We have a valid short code.
     bitSource.consume(numBits);
@@ -81,7 +89,7 @@ void HuffmanDecoder::generateLuts(const HuffmanTable& huffTable)
 {
     uint8_t huffCodeLen[HUFF_MAX_NUMBER_SYMBOLS + 1];
     int huffCode[HUFF_MAX_NUMBER_SYMBOLS + 1];
-    int numSymbols = makeCodeAndLengthTables(huffCode, huffCodeLen, huffTable);
+    makeCodeAndLengthTables(huffCode, huffCodeLen, huffTable);
 
    /*
     * Figure F.15 of JPEG standard: generate decoding tables for bit-sequential

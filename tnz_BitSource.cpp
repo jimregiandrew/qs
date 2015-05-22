@@ -64,6 +64,11 @@ void BitSource::consume(int size)
     if (size > availableBits) {
         getBytes();
     }
+    if (size > 25) {
+    	int extra = size - 25;
+    	consume(extra);
+    	size = 25;
+    }
     bitOffset += size;
 	availableBits -= size;
     int byteAdvance = bitOffset >> 3;

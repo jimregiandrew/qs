@@ -9,6 +9,7 @@
 #define CODERS_H_
 
 #include <memory>
+#include <vector>
 
 namespace tnz {
 
@@ -19,7 +20,9 @@ class IntCoder
 {
 public:
 	virtual ~IntCoder() {}
-	virtual void code(int, BitSink& bitSink) = 0;
+	virtual void code(BitSink& bitSink, int val) = 0;
+    virtual void flush(BitSink& bitSink) = 0;
+    virtual const std::vector<int>& getCounts() const = 0;
 };
 
 class IntPredictor
@@ -37,7 +40,7 @@ public:
 class DoublesCoder
 {
 public:
-	DoublesCoder(double qStep, std::shared_ptr<IntPredictor> predictor, std::shared_ptr<Modeller> modeller,
+	DoublesCoder(double qStep, std::shared_ptr<IntPredictor> predictor,
 			std::shared_ptr<IntCoder> coder, std::shared_ptr<BitSink> bitSink);
 
 	void code(const double* data, int dataLen);
@@ -45,10 +48,14 @@ public:
 private:
 	double qf;
 	std::shared_ptr<IntPredictor> predictor;
-	std::shared_ptr<Modeller> modeller;
 	std::shared_ptr<IntCoder> coder;
 	std::shared_ptr<BitSink> bitSink;
 };
+
+IntPredictor* getIntPredictor(int order, int initial1=0, int initial2=0);
+
+class HuffmanTable;
+IntCoder* getSizeIntCoder(const HuffmanTable& table);
 
 }
 

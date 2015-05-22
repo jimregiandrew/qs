@@ -29,7 +29,7 @@ Model getMagBitsModel(int val)
       nbits++;
       val >>= 1;
     }
-    return Model{(uint8_t)nbits, nbits, temp};
+    return Model{nbits, nbits, temp};
 }
 
 class MagModeller : public Modeller

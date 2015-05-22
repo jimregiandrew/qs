@@ -30,7 +30,7 @@ namespace tnz {
  *
  * We use a Canonical Huffman symbol representation to describe the Huffman symbol.
  * See e.g. http://en.wikipedia.org/wiki/Canonical_Huffman_code.
- * This has an advantage in that the Huffman table can be stored compactly
+ * This has the advantage that the Huffman table can be stored compactly
  * (the same that is used in JPEG). Specifically, numCodes[i] stores the
  * number of codes of length i (i=1,2,..,HUFF_MAX_CODE_LENGTH), and symbol[n] is the nth symbol
  * (n=0,1,..,HUFF_MAX_NUMBER_SYMBOLS-1), where the symbols are ordered according to
@@ -43,6 +43,8 @@ struct HuffmanTable
     uint8_t symbol[HUFF_MAX_NUMBER_SYMBOLS];
     //ToDo: look for type errors because I had symbol as array of int (and not uint8_t).
 };
+
+HuffmanTable getDefaultHuffmanTable();
 
 int makeCodeAndLengthTables(int *huffCode, uint8_t *huffCodeLen, const HuffmanTable& huffTable);
 

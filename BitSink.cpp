@@ -26,14 +26,26 @@ BitSink::~BitSink()
 	flush();
 }
 
+/*
+ * queuedBits queued bits are stored in the msb's of bitBuf. So the first bit received is
+ * stored in bit 31, the second bit in bit 30 etc. When there are at least 8 queuedBits in bitBuf,
+ * the msbyte of bitBuf is output (to byteBuf). Thus the first bit received becomes the msb of the
+ * (first) byte in byteBuf, the second bit the next msb of this byte and so on.
+ */
 void BitSink::receive(uint32_t code, int size)
 {
 	assert(size > 0 && size <= 32);
 
-	code &= (((uint32_t) 1) << size) - 1; /* mask off any extra bits in code */
-	int putBits = queuedBits + size;     /* new number of bits in buffer */
-	code <<= 32 - putBits; /* align incoming bits */
-	code |= bitBuf; /* and merge with old put buffer contents */
+	if (size > 25) {
+        int extra = size - 25;
+        receive(code >> extra, 25);
+        receive(code, extra);
+		return;
+	}
+	code &= (((uint32_t) 1) << size) - 1; // mask off any extra bits in code
+	int putBits = queuedBits + size;     // queuedBits <= 7, so putBits<= 32 if size <= 25
+	code <<= 32 - putBits; // align incoming bits
+	code |= bitBuf; // and merge with old put buffer contents
 	while (putBits >= 8) {
 		uint8_t c = (uint8_t) (code >> 24);
 		emitByte(c);

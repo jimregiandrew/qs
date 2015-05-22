@@ -20,7 +20,8 @@ class HuffmanDecoder
         HuffmanDecoder(const HuffmanTable& huffTable);
 
         static const int HUFF_NEED_MORE_BITS = -1;
-        int decodeSymbol(BitSource& bitSource);
+        static const int HUFF_DECODING_OK = 0;
+        int decode(BitSource& bitSource);
 
       private:
         int decodeLongCode(BitSource& bit_source);

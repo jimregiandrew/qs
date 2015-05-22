@@ -8,6 +8,8 @@
 #ifndef TNZ_BITSOURCE_H_
 #define TNZ_BITSOURCE_H_
 
+#include <assert.h>
+
 #include <memory>
 #include <vector>
 
@@ -34,15 +36,37 @@ public:
     inline int getAvailableBits() {
         return availableBits;
     }
+    void consume(int numBits);
+    // peek up to 25 bits
     inline uint32_t peek(int size) {
+    	assert(size <= 25); // bitBuf may not hold more than 25 valid bits - see updateBitBuf
         if (size == 0)
             return 0;
         else
-            return bitBuf >> (32-size); // Next bit is bit 31 (the msb)
+            return bitBuf >> (32-size); // Next bit is bit 31 (the msb) in bitBuf
     }
-	void consume(int numBits);
+    inline uint32_t pop25(int size)
+    {
+        assert(size <= 25);
+        uint32_t value = peek(size);
+        consume(size);
+        return value;
+    }
+
+    uint32_t pop(int size)
+    {
+        if (size <= 25)
+            return pop25(size);
+        else {
+            int extra = size - 25;
+            uint32_t value = pop25(25) << extra;
+            return value | pop25(extra);
+        }
+    }
+
 
 private:
+	// updateBitBuf fills at least 25 valid bits into bitBuff (assuming bitOffset <= 7)
     inline void updateBitBuf()
     {
         bitBuf =
