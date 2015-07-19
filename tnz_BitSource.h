@@ -64,7 +64,6 @@ public:
         }
     }
 
-
 private:
 	// updateBitBuf fills at least 25 valid bits into bitBuff (assuming bitOffset <= 7)
     inline void updateBitBuf()

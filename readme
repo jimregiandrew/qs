@@ -2,10 +2,37 @@ Remember
 --------
 Just a proof of concept. Keep it simple.
 
+Where I am at
+-------------
+Quantity sequence is a good name. See Wikipedia for physical quantity.
+
+Need to cement an (initial) file format. Quantities sequence:
+
+Nq_Nn_T0_QS0_QS1..QSN-1
+
+Nq : number of quantities
+Nn : length of sequence (number of samples of each quantity)
+T0 : start epoch seconds
+QS0,1,..N-1 : qantity sequence 0, prefixed with quantization step size and 
+
+Note: QSn can include quantity specifier, or have bitmask following e.g. Nq to indicate which of std, quantities are included. Have num. of non-std ones, plus their definition following.
+
+Ideas: bitmask, logger (index to table of different vector quantity sequences), fixed Huffman code for std Q's
+Ideas: 16 bit quantization step size definition.
+
+Remember: KISS and its just a pototype
+
+Thoughts
+-------
+
+Allow all 1's Huffman symbol?
+Document BitSink has 25 bit limit, and protect with asserts
+List bugs found for learning.
+
 Intro
 -----
-Specify a file format for representing numeric (and enumerated) data sequences, also known as time-series or digital data. The following examples
-are all a function of time, although this is not necessary.
+Specify a file format for representing numeric (and enumerated) quantity sequences, also known as time-series or digital data. The following examples
+are all a function of time, although this is not necessary, and cover some finite period of time.
 
 1. example1.tnz: contains the latitude, longitude, speed, distance travelled, fuel used, rpm, and (3-dimensional) acceleration values every second for a vehicle.
 2. example2.tnz: contains the latitude, longitude and temperature reading for a refreigerated cargo, every 30 seconds.
