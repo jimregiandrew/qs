@@ -1,10 +1,10 @@
 /*
- * g++ --std=c++0x -o test test.cpp BitSink.cpp tnz_BitSource.cpp HuffmanCoder.cpp HuffmanDecoder.cpp HuffmanTable.cpp
+ * g++ --std=c++0x -o test test.cpp BitSink.cpp qs_BitSource.cpp HuffmanCoder.cpp HuffmanDecoder.cpp HuffmanTable.cpp
  */
 #include "catch.hpp"
 
 #include "BitSink.h"
-#include "tnz_BitSource.h"
+#include "qs_BitSource.h"
 
 #include <memory>
 #include <vector>
@@ -12,7 +12,7 @@
 using std::shared_ptr;
 using std::vector;
 
-namespace tnz {
+namespace qs {
 
 class TestingByteSink : public ByteSink
 {
@@ -77,4 +77,4 @@ TEST_CASE( "BitSink", "[bitsink]" ) {
     }
 }
 
-} // namespace tnz
+} // namespace qs

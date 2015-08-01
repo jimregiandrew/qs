@@ -1,17 +1,17 @@
 /*
- * tnz_BitSource.cpp
+ * qs_BitSource.cpp
  *
  *  Created on: 7/05/2015
  *      Author: jim
  */
 
-#include "tnz_BitSource.h"
+#include "qs_BitSource.h"
 
 #include <vector>
 
 using std::vector;
 
-namespace tnz {
+namespace qs {
 
 BitSource::BitSource(std::shared_ptr<ByteSource> byteSource)
 	: byteSource(byteSource),
@@ -90,4 +90,4 @@ void BitSource::consume(int size)
 		throw std::logic_error("availableBits < 0");
 }
 
-} // namespace tnz
+} // namespace qs

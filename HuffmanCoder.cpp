@@ -14,7 +14,7 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace tnz {
+namespace qs {
 
 HuffmanCoder::HuffmanCoder(const HuffmanTable& huffmanTable)
 {
@@ -88,4 +88,4 @@ void HuffmanCoder::flush(BitSink& bitSink)
 	bitSink.receive(0xFF, 7);
 }
 
-} // namespace tnz
+} // namespace qs

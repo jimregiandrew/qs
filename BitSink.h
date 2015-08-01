@@ -13,7 +13,7 @@
 #include <memory>
 #include <vector>
 
-namespace tnz {
+namespace qs {
 
 class ByteSink;
 

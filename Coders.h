@@ -11,7 +11,7 @@
 #include <memory>
 #include <vector>
 
-namespace tnz {
+namespace qs {
 
 class Modeller;
 class BitSink;

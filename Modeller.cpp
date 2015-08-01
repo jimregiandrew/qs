@@ -10,7 +10,7 @@
 
 #include <limits.h>
 
-namespace tnz {
+namespace qs {
 
 /*
  * Finds the number of bits needed to represent val
@@ -66,4 +66,4 @@ const Model& ZeroRLMagModeller::model(int symbol)
 }
 
 
-} // namespace tnz
+} // namespace qs

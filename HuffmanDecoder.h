@@ -10,7 +10,7 @@
 
 #include "HuffmanTable.h"
 
-namespace tnz {
+namespace qs {
 
 class BitSource;
 
@@ -37,6 +37,6 @@ class HuffmanDecoder
         int32_t maxCode[HUFF_MAX_CODE_LENGTH + 2];
 };
 
-} // namespace tnz
+} // namespace qs
 
 #endif /* HUFFMANDECODER_H_ */

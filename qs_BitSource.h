@@ -1,5 +1,5 @@
 /*
- * tnz_BitSource.h
+ * qs_BitSource.h
  *
  *  Created on: 7/05/2015
  *      Author: jim
@@ -13,7 +13,7 @@
 #include <memory>
 #include <vector>
 
-namespace tnz {
+namespace qs {
 
 class ByteSource;
 
@@ -108,6 +108,6 @@ private:
     int accessCount;
 };
 
-} // namespace tnz
+} // namespace qs
 
 #endif /* TNZ_BITSOURCE_H_ */

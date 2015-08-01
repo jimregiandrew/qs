@@ -1,11 +1,11 @@
 #include "HuffmanDecoder.h"
-#include "tnz_BitSource.h"
+#include "qs_BitSource.h"
 
 #include <cstring>
 
 #include <stdexcept>
 
-namespace tnz {
+namespace qs {
 
 HuffmanDecoder::HuffmanDecoder(const HuffmanTable& huffTable)
 	: huffTable(huffTable)
@@ -134,4 +134,4 @@ void HuffmanDecoder::generateLuts(const HuffmanTable& huffTable)
     // ToDo: We should validate symbols as being reasonable (as in IJG code) ...
 }
 
-} //namespace tnz
+} //namespace qs

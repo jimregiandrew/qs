@@ -10,7 +10,7 @@
 #include <cassert>
 #include <memory>
 
-namespace tnz {
+namespace qs {
 
 BitSink::BitSink(std::shared_ptr<ByteSink> byteSink)
 	: out(byteSink),

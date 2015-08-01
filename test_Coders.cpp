@@ -1,10 +1,10 @@
 /*
- * g++ --std=c++0x -o test test.cpp test_Huffman.cpp BitSink.cpp tnz_BitSource.cpp HuffmanCoder.cpp HuffmanDecoder.cpp HuffmanTable.cpp
+ * g++ --std=c++0x -o test test.cpp test_Huffman.cpp BitSink.cpp qs_BitSource.cpp HuffmanCoder.cpp HuffmanDecoder.cpp HuffmanTable.cpp
  */
 #include "catch.hpp"
 
 #include "BitSink.h"
-#include "tnz_BitSource.h"
+#include "qs_BitSource.h"
 #include "Coders.h"
 #include "Decoders.h"
 #include "HuffmanTable.h"
@@ -17,7 +17,7 @@
 using std::shared_ptr;
 using std::vector;
 
-namespace tnz {
+namespace qs {
 
 TEST_CASE( "IntCoder tests", "[intcoder]" ) {
 
@@ -34,8 +34,8 @@ TEST_CASE( "IntCoder tests", "[intcoder]" ) {
     	bitSink.close();
 
     	const std::vector<uint8_t> code = byteSink->getBuf();
-    	shared_ptr<tnz::ByteBuffer> byteSource(new tnz::ByteBuffer(byteSink->getBuf()));
-    	tnz::BitSource bitSource(byteSource);
+    	shared_ptr<qs::ByteBuffer> byteSource(new qs::ByteBuffer(byteSink->getBuf()));
+    	qs::BitSource bitSource(byteSource);
     	shared_ptr<IntDecoder> intDecoder(getSizeIntDecoder(table));
     	for (auto val: seq) {
     		IntDecoder::Run run;
@@ -45,4 +45,4 @@ TEST_CASE( "IntCoder tests", "[intcoder]" ) {
 	}
 }
 
-} // namespace tnz
+} // namespace qs

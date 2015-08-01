@@ -8,7 +8,7 @@
 #ifndef DECODERS_H_
 #define DECODERS_H_
 
-namespace tnz {
+namespace qs {
 
 class BitSource;
 

@@ -10,7 +10,7 @@
 
 #include "HuffmanTable.h"
 
-namespace tnz {
+namespace qs {
 
 class BitSink;
 
@@ -30,6 +30,6 @@ private:
 	char codeLengthLut[HUFF_MAX_NUMBER_SYMBOLS]; // LUT mapping symbols to code length (number bits)
 };
 
-} // namespace tnz
+} // namespace qs
 
 #endif /* TNZ_HUFFMANCODER_H_ */

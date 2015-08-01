@@ -14,7 +14,7 @@
 
 #include <iostream>
 
-namespace tnz {
+namespace qs {
 
 class BitStream;
 
@@ -50,7 +50,7 @@ inline std::ostream& operator<<(std::ostream& os, const Model& m)
 	return os;
 }
 
-} // namespace tnz
+} // namespace qs
 
 
 

@@ -18,7 +18,7 @@
 using std::shared_ptr;
 using std::vector;
 
-namespace tnz {
+namespace qs {
 
 /*
  *  Do we use a 'generic' Model here e.g.

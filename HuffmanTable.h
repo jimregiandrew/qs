@@ -12,7 +12,7 @@
 
 #include <ostream>
 
-namespace tnz {
+namespace qs {
 
 #define HUFF_MAX_CODE_LENGTH 16
 #define HUFF_MAX_NUMBER_SYMBOLS 256
@@ -79,6 +79,6 @@ inline std::ostream& operator << (std::ostream& os, const HuffmanTable& table)
     return os;
 }
 
-} // namespace tnz
+} // namespace qs
 
 #endif /* HUFFMANTABLE_H_ */

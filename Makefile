@@ -1,4 +1,5 @@
 # http://www.puxan.com/web/blog/HowTo-Write-Generic-Makefiles
+# See also http://stackoverflow.com/questions/2481269/how-to-make-simple-c-makefile
 # Declaration of variables
 CC = g++
 CC_FLAGS = -Wall -Wextra --std=c++0x -g -D_GLIBCXX_DEBUG

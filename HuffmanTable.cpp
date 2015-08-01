@@ -11,7 +11,7 @@
 
 #include <stdexcept>
 
-namespace tnz {
+namespace qs {
 
 /*
  * Makes a default Huffman table (currently hack from the JPEG
@@ -129,4 +129,4 @@ uint32_t kraftSum(const uint8_t* numCodes, int maxCodeLen)
 	return sum;
 }
 
-} // namespace tnz
+} // namespace qs

@@ -5,7 +5,7 @@
  *      Author: jim
  */
 
-#include "tnz_BitSource.h"
+#include "qs_BitSource.h"
 #include "Decoders.h"
 #include "HuffmanDecoder.h"
 #include "HuffmanTable.h"
@@ -15,7 +15,7 @@
 #include <memory>
 #include <sstream>
 
-namespace tnz {
+namespace qs {
 
 class SizeIntDecoder : public IntDecoder
 {

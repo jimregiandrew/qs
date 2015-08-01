@@ -1,10 +1,10 @@
 /*
- * g++ --std=c++0x -o test test.cpp test_Huffman.cpp BitSink.cpp tnz_BitSource.cpp HuffmanCoder.cpp HuffmanDecoder.cpp HuffmanTable.cpp
+ * g++ --std=c++0x -o test test.cpp test_Huffman.cpp BitSink.cpp qs_BitSource.cpp HuffmanCoder.cpp HuffmanDecoder.cpp HuffmanTable.cpp
  */
 #include "catch.hpp"
 
 #include "BitSink.h"
-#include "tnz_BitSource.h"
+#include "qs_BitSource.h"
 #include "Coders.h"
 #include "Decoders.h"
 #include "HuffmanTable.h"
@@ -18,7 +18,7 @@
 using std::shared_ptr;
 using std::vector;
 
-namespace tnz {
+namespace qs {
 
 TEST_CASE( "Huffman coding", "[huffman]" ) {
 
@@ -27,7 +27,7 @@ TEST_CASE( "Huffman coding", "[huffman]" ) {
 	SECTION( "Simple huffman coding test" ) {
     	// Huffman code with 1 code of length 1 bit and 4 codes of length 3.
     	// Symbols are 0,1,..4 (i.e. symbols (also) ordered according to code word length and order
-    	tnz::HuffmanTable huffTable = { {0, 1, 0, 3}, {0, 1, 2, 3} };
+    	qs::HuffmanTable huffTable = { {0, 1, 0, 3}, {0, 1, 2, 3} };
     	BitSink bitSink(byteSink);
     	HuffmanCoder huffCoder(huffTable);
     	huffCoder.code(bitSink, 0); // Code 0
@@ -42,9 +42,9 @@ TEST_CASE( "Huffman coding", "[huffman]" ) {
     	REQUIRE(code[0] == 0x4B);
     	REQUIRE(code[1] == 0xBF);
 
-    	shared_ptr<tnz::ByteBuffer> byteSource(new tnz::ByteBuffer(byteSink->getBuf()));
-    	tnz::BitSource bitSource(byteSource);
-    	tnz::HuffmanDecoder huffDecoder(huffTable);
+    	shared_ptr<qs::ByteBuffer> byteSource(new qs::ByteBuffer(byteSink->getBuf()));
+    	qs::BitSource bitSource(byteSource);
+    	qs::HuffmanDecoder huffDecoder(huffTable);
     	int sym = 0;
     	sym = huffDecoder.decode(bitSource);
     	REQUIRE(sym == 0);
@@ -60,13 +60,13 @@ TEST_CASE( "Huffman coding", "[huffman]" ) {
 
 	SECTION( "Kraft inequality" ) {
 		{
-			tnz::HuffmanTable huffTable = { {0, 1, 0, 3}, {0, 1, 2, 3} };
+			qs::HuffmanTable huffTable = { {0, 1, 0, 3}, {0, 1, 2, 3} };
 			int maxCodeLen = 3;
 			uint32_t ksum = kraftSum(huffTable.numCodes, maxCodeLen);
 			REQUIRE(ksum == (1 << maxCodeLen) - 1);
 		}
 		{
-			tnz::HuffmanTable huffTable = { {0, 1, 0, 4}, {0, 1, 2, 3, 4} };
+			qs::HuffmanTable huffTable = { {0, 1, 0, 4}, {0, 1, 2, 3, 4} };
 			int maxCodeLen = 3;
 			uint32_t ksum = kraftSum(huffTable.numCodes, maxCodeLen);
 			REQUIRE(ksum == (1 << maxCodeLen));
@@ -75,43 +75,43 @@ TEST_CASE( "Huffman coding", "[huffman]" ) {
 
 	SECTION( "magnitude bits" ) {
 		{
-			tnz::Model model = getMagBitsModel(0);
-			tnz::Model shouldBe = Model{0,0,0};
+			qs::Model model = getMagBitsModel(0);
+			qs::Model shouldBe = Model{0,0,0};
 			REQUIRE(model == shouldBe);
 		}
 		{
-			tnz::Model model = getMagBitsModel(1);
-			tnz::Model shouldBe = Model{1,1,1};
+			qs::Model model = getMagBitsModel(1);
+			qs::Model shouldBe = Model{1,1,1};
 			REQUIRE(model == shouldBe);
 		}
 		{
-			tnz::Model model = getMagBitsModel(-1);
-			tnz::Model shouldBe = Model{1,1,-2}; // bits = 0b
+			qs::Model model = getMagBitsModel(-1);
+			qs::Model shouldBe = Model{1,1,-2}; // bits = 0b
 			REQUIRE(model == shouldBe);
 		}
 		{
-			tnz::Model model = getMagBitsModel(2);
-			tnz::Model shouldBe = Model{2,2,2}; // bits = 10b = 2
+			qs::Model model = getMagBitsModel(2);
+			qs::Model shouldBe = Model{2,2,2}; // bits = 10b = 2
 			REQUIRE(model == shouldBe);
 		}
 		{
-			tnz::Model model = getMagBitsModel(3);
-			tnz::Model shouldBe = Model{2,2,3}; // bits = 11b = 3
+			qs::Model model = getMagBitsModel(3);
+			qs::Model shouldBe = Model{2,2,3}; // bits = 11b = 3
 			REQUIRE(model == shouldBe);
 		}
 		{
-			tnz::Model model = getMagBitsModel(-2);
-			tnz::Model shouldBe = Model{2,2,-3}; // bits = 01b = 1
+			qs::Model model = getMagBitsModel(-2);
+			qs::Model shouldBe = Model{2,2,-3}; // bits = 01b = 1
 			REQUIRE(model == shouldBe);
 		}
 		{
-			tnz::Model model = getMagBitsModel(-3);
-			tnz::Model shouldBe = Model{2,2,-4}; // bits = -100 = 2
+			qs::Model model = getMagBitsModel(-3);
+			qs::Model shouldBe = Model{2,2,-4}; // bits = -100 = 2
 			REQUIRE(model == shouldBe);
 		}
 		{
-			tnz::Model model = getMagBitsModel(0xabcd);
-			tnz::Model shouldBe = Model{16,16,0xabcd}; // bits = 0xabcd
+			qs::Model model = getMagBitsModel(0xabcd);
+			qs::Model shouldBe = Model{16,16,0xabcd}; // bits = 0xabcd
 			REQUIRE(model == shouldBe);
 		}
 	}
@@ -144,4 +144,4 @@ TEST_CASE( "Huffman coding", "[huffman]" ) {
 	}
 }
 
-} // namespace tnz
+} // namespace qs
