@@ -4,14 +4,21 @@
 CC = g++
 CC_FLAGS = -Wall -Wextra --std=c++0x -g -D_GLIBCXX_DEBUG
 
-# File names
-EXEC = test
-SOURCES = $(wildcard *.cpp)
-OBJECTS = $(SOURCES:.cpp=.o)
+all: test qsc
 
+# File names
+TEST = test
+SOURCES_TEST = BitSink.cpp  Coders.cpp    HuffmanCoder.cpp    HuffmanTable.cpp  qs_BitSource.cpp  qs_Quantity.cpp   test_Coders.cpp catch.cpp    Decoders.cpp  HuffmanDecoder.cpp  Modeller.cpp test_BitSink.cpp  test_Huffman.cpp
+OBJECTS_TEST = $(SOURCES_TEST:.cpp=.o)
 # Main target
-$(EXEC): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(EXEC)
+$(TEST): $(OBJECTS_TEST)
+	$(CC) $(OBJECTS_TEST) -o $(TEST)
+
+QSC = qsc
+SOURCES_QSC = qsc.cpp
+OBJECTS_QSC = $(SOURCES_QSC:.cpp=.o)
+$(QSC): $(OBJECTS_QSC)
+	$(CC) $(OBJECTS_QSC) -o $(QSC)
 
 # To obtain object files
 %.o: %.cpp
@@ -19,4 +26,4 @@ $(EXEC): $(OBJECTS)
 
 # To remove generated files
 clean:
-	rm -f $(EXEC) $(OBJECTS)
+	rm -f $(TEST) $(OBJECTS_TEST) $(QSC) $(OBJECTS_QSC)
