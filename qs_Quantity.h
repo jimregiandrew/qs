@@ -8,6 +8,8 @@
 #ifndef TNZ_QUANTITY_H_
 #define TNZ_QUANTITY_H_
 
+#include "BitSink.h"
+
 #include <stdint.h>
 
 #include <map>
@@ -31,6 +33,7 @@ struct QStep {
     int8_t  exp;
     QStep(uint8_t sig=0, int8_t exp=0) : sig(sig), exp(exp) {}
 };
+
 struct QuantityInfo {
     std::string name;
     std::string unit;
@@ -38,11 +41,12 @@ struct QuantityInfo {
     QuantityInfo(const std::string& name="", const std::string& unit="", const QStep& qStep=QStep())
         : name(name), unit(unit), qStep(qStep) {}
 };
-class QuantitySequence;
+class IntCoder;
+class IntPredictor;
 class QuantitiesSequence
 {
     public:
-        QuantitiesSequence(const std::vector<QuantityInfo>& quantities);
+        QuantitiesSequence(const std::vector<QuantityInfo>& qInfos);
         ~QuantitiesSequence();
 
         void push(const std::vector<double>& quantities);
@@ -50,7 +54,12 @@ class QuantitiesSequence
         std::vector<uint8_t> getCode() const;
 
     private:
-        std::vector<QuantitySequence> quantitySequences;
+        std::vector<QuantityInfo> qInfos;
+        std::vector<std::shared_ptr<IntCoder> > intCoders;
+        std::vector<std::shared_ptr<ByteBufferSink> > byteSinks;
+        std::vector<BitSink> bitSinks;
+        std::vector<std::shared_ptr<IntPredictor> > intPredictors;
+        std::vector<double> qMuls;
         uint32_t numVals;
 };
 

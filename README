@@ -11,7 +11,7 @@ or more generally is a sequence. Also known as time-series or digital data. The
 following are all a function of time, and are for some time period:
 
 1. latitude, longitude, speed, distance travelled, fuel used, rpm, and
-(3-dimensional) acceleration values every second for a vehicle/
+(3-dimensional) acceleration values every second for a vehicle.
 2. latitude, longitude and temperature reading for a refreigerated cargo, every
 30 seconds.
 3. lateral, medial and vertical acceleration values every millisecond 
@@ -24,9 +24,9 @@ interval.
 8. Data logger data
 
 This is the file format for "the internet of things" for sensors. Smart phones 
-could be logging a lot of data, that would be so useful if we could understand
+could be logging a lot of datax, that would be so useful if we could understand
 (know the format) and share it. (Think acceleration, speed and pollution values
-of my bus trip (and day).
+of my bus trip, or day).
 
 Wikipedia has a definition of quantity. This format is for any numeric or 
 enumerated data.

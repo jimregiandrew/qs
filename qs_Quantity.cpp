@@ -5,7 +5,9 @@
  *      Author: jim
  */
 
-
+#include "BitSink.h"
+#include "Coders.h"
+#include "HuffmanTable.h"
 #include "qs_Quantity.h"
 #include "utils.h"
 
@@ -36,96 +38,96 @@ struct UnitInfo
     UnitInfo(const string& name, const string& quantity, const string& symbol) : name(name), quantity(quantity), symbol(symbol) {}
 };
 
-static const UnitInfo* getUnitsInfo(int &len)
-{
-    /*!
-     * Table generated from:
-     *   grep \<unit\  ~/src/ingenitech/apps/units.xml | ~/bin/units-xml-2-c-array.awk
-     *  And the XML file generated from
-     *   ~/bin/si-table-2-xml.awk
-     *  pasting in the tables from http://physics.nist.gov/cuu/Units/units.html
-     */
-    static const UnitInfo UNITS_INFO[] = {
-        UnitInfo("meter", "length", "m"),
-        UnitInfo("kilogram", "mass", "kg"),
-        UnitInfo("second", "time", "s"),
-        UnitInfo("ampere", "electric current", "A"),
-        UnitInfo("kelvin", "thermodynamic temperature", "K"),
-        UnitInfo("mole", "amount of substance", "mol"),
-        UnitInfo("candela", "luminous intensity", "cd"),
-        UnitInfo("square meter", "area", "m2"),
-        UnitInfo("cubic meter", "volume", "m3"),
-        UnitInfo("meter per second", "speed, velocity", "m/s"),
-        UnitInfo("meter per second squared  ", "acceleration", "m/s2"),
-        UnitInfo("reciprocal meter", "wave number", "m-1"),
-        UnitInfo("kilogram per cubic meter", "mass density", "kg/m3"),
-        UnitInfo("cubic meter per kilogram", "specific volume", "m3/kg"),
-        UnitInfo("ampere per square meter", "current density", "A/m2"),
-        UnitInfo("ampere per meter", "magnetic field strength  ", "A/m"),
-        UnitInfo("mole per cubic meter", "amount-of-substance concentration", "mol/m3"),
-        UnitInfo("candela per square meter", "luminance", "cd/m2"),
-        UnitInfo("kilogram per kilogram, which may be represented by the number 1", "mass fraction", "kg/kg = 1"),
-        UnitInfo("radian (a)", "plane angle", "rad"),
-        UnitInfo("steradian (a)", "solid angle", "sr (c)"),
-        UnitInfo("hertz", "frequency", "Hz"),
-        UnitInfo("newton", "force", "N"),
-        UnitInfo("pascal", "pressure, stress", "Pa"),
-        UnitInfo("joule", "energy, work, quantity of heat  ", "J"),
-        UnitInfo("watt", "power, radiant flux", "W"),
-        UnitInfo("coulomb", "electric charge, quantity of electricity", "C"),
-        UnitInfo("", "electric potential difference,", ""),
-        UnitInfo("volt", "electromotive force", "V"),
-        UnitInfo("farad", "capacitance", "F"),
-        UnitInfo("ohm", "electric resistance", "Omega"),
-        UnitInfo("siemens", "electric conductance", "S"),
-        UnitInfo("weber", "magnetic flux", "Wb"),
-        UnitInfo("tesla", "magnetic flux density", "T"),
-        UnitInfo("henry", "inductance", "H"),
-        UnitInfo("degree Celsius", "Celsius temperature", "°C"),
-        UnitInfo("lumen", "luminous flux", "lm"),
-        UnitInfo("lux", "illuminance", "lx"),
-        UnitInfo("becquerel", "activity (of a radionuclide)", "Bq"),
-        UnitInfo("gray", "absorbed dose, specific energy (imparted), kerma", "Gy"),
-        UnitInfo("sievert", "dose equivalent (d)", "Sv"),
-        UnitInfo("katal", "catalytic activity", "kat"),
-        UnitInfo("degree Farenheit", "Farenheit temperature", "°F"),
-        UnitInfo("pounds per square inch", "psi pressure", "psi"),
-        UnitInfo("percentage", "percentage", "%"),
-        UnitInfo("boolean", "boolean", " "),
-        UnitInfo("enumerated", "enumerated", ""),
-        UnitInfo("count", "count,id", " "),
-    };
-    len = sizeof(UNITS_INFO)/sizeof(UNITS_INFO[0]);
-    return UNITS_INFO;
-}
+//static const UnitInfo* getUnitsInfo(int &len)
+//{
+//    /*!
+//     * Table generated from:
+//     *   grep \<unit\  ~/src/ingenitech/apps/units.xml | ~/bin/units-xml-2-c-array.awk
+//     *  And the XML file generated from
+//     *   ~/bin/si-table-2-xml.awk
+//     *  pasting in the tables from http://physics.nist.gov/cuu/Units/units.html
+//     */
+//    static const UnitInfo UNITS_INFO[] = {
+//        UnitInfo("meter", "length", "m"),
+//        UnitInfo("kilogram", "mass", "kg"),
+//        UnitInfo("second", "time", "s"),
+//        UnitInfo("ampere", "electric current", "A"),
+//        UnitInfo("kelvin", "thermodynamic temperature", "K"),
+//        UnitInfo("mole", "amount of substance", "mol"),
+//        UnitInfo("candela", "luminous intensity", "cd"),
+//        UnitInfo("square meter", "area", "m2"),
+//        UnitInfo("cubic meter", "volume", "m3"),
+//        UnitInfo("meter per second", "speed, velocity", "m/s"),
+//        UnitInfo("meter per second squared  ", "acceleration", "m/s2"),
+//        UnitInfo("reciprocal meter", "wave number", "m-1"),
+//        UnitInfo("kilogram per cubic meter", "mass density", "kg/m3"),
+//        UnitInfo("cubic meter per kilogram", "specific volume", "m3/kg"),
+//        UnitInfo("ampere per square meter", "current density", "A/m2"),
+//        UnitInfo("ampere per meter", "magnetic field strength  ", "A/m"),
+//        UnitInfo("mole per cubic meter", "amount-of-substance concentration", "mol/m3"),
+//        UnitInfo("candela per square meter", "luminance", "cd/m2"),
+//        UnitInfo("kilogram per kilogram, which may be represented by the number 1", "mass fraction", "kg/kg = 1"),
+//        UnitInfo("radian (a)", "plane angle", "rad"),
+//        UnitInfo("steradian (a)", "solid angle", "sr (c)"),
+//        UnitInfo("hertz", "frequency", "Hz"),
+//        UnitInfo("newton", "force", "N"),
+//        UnitInfo("pascal", "pressure, stress", "Pa"),
+//        UnitInfo("joule", "energy, work, quantity of heat  ", "J"),
+//        UnitInfo("watt", "power, radiant flux", "W"),
+//        UnitInfo("coulomb", "electric charge, quantity of electricity", "C"),
+//        UnitInfo("", "electric potential difference,", ""),
+//        UnitInfo("volt", "electromotive force", "V"),
+//        UnitInfo("farad", "capacitance", "F"),
+//        UnitInfo("ohm", "electric resistance", "Omega"),
+//        UnitInfo("siemens", "electric conductance", "S"),
+//        UnitInfo("weber", "magnetic flux", "Wb"),
+//        UnitInfo("tesla", "magnetic flux density", "T"),
+//        UnitInfo("henry", "inductance", "H"),
+//        UnitInfo("degree Celsius", "Celsius temperature", "°C"),
+//        UnitInfo("lumen", "luminous flux", "lm"),
+//        UnitInfo("lux", "illuminance", "lx"),
+//        UnitInfo("becquerel", "activity (of a radionuclide)", "Bq"),
+//        UnitInfo("gray", "absorbed dose, specific energy (imparted), kerma", "Gy"),
+//        UnitInfo("sievert", "dose equivalent (d)", "Sv"),
+//        UnitInfo("katal", "catalytic activity", "kat"),
+//        UnitInfo("degree Farenheit", "Farenheit temperature", "°F"),
+//        UnitInfo("pounds per square inch", "psi pressure", "psi"),
+//        UnitInfo("percentage", "percentage", "%"),
+//        UnitInfo("boolean", "boolean", " "),
+//        UnitInfo("enumerated", "enumerated", ""),
+//        UnitInfo("count", "count,id", " "),
+//    };
+//    len = sizeof(UNITS_INFO)/sizeof(UNITS_INFO[0]);
+//    return UNITS_INFO;
+//}
 
-static int getUnitIdx(const std::string& name)
-{
-    int len;
-    const UnitInfo* unitsInfo = getUnitsInfo(len);
-    int ret = -1;
-    for (int n = 0; n < len; ++n) {
-        string iname(unitsInfo[n].name.c_str());
-        if (iname.find(name.c_str()) != string::npos) {
-            ret = n;
-            break;
-        }
-    }
-    return ret;
-}
+//static int getUnitIdx(const std::string& name)
+//{
+//    int len;
+//    const UnitInfo* unitsInfo = getUnitsInfo(len);
+//    int ret = -1;
+//    for (int n = 0; n < len; ++n) {
+//        string iname(unitsInfo[n].name.c_str());
+//        if (iname.find(name.c_str()) != string::npos) {
+//            ret = n;
+//            break;
+//        }
+//    }
+//    return ret;
+//}
 
-static const std::string unitIdxToName(uint8_t idx)
-{
-    int len;
-    const UnitInfo* unitsInfo = getUnitsInfo(len);
-
-    if (idx >= len) {
-    	std::ostringstream oss;
-    	oss<<"idx="<<idx<<" is greater than unit table length="<<len;
-        throw std::logic_error(oss.str());
-    }
-    return unitsInfo[idx].name;
-}
+//static const std::string unitIdxToName(uint8_t idx)
+//{
+//    int len;
+//    const UnitInfo* unitsInfo = getUnitsInfo(len);
+//
+//    if (idx >= len) {
+//    	std::ostringstream oss;
+//    	oss<<"idx="<<idx<<" is greater than unit table length="<<len;
+//        throw std::logic_error(oss.str());
+//    }
+//    return unitsInfo[idx].name;
+//}
 
 const char** getStdQuantities()
 {
@@ -244,12 +246,12 @@ QStep getDefaultQStep(uint8_t defIdx)
     return defaultQSteps[defIdx];
 }
 
-static QStep getUnixTimeQStep(const std::string& baseChannel)
-{
-    if (baseChannel.find("acceleration") != string::npos)
-        return QStep(0,-1);
-    return QStep(0, -1);
-}
+//static QStep getUnixTimeQStep(const std::string& baseChannel)
+//{
+//    if (baseChannel.find("acceleration") != string::npos)
+//        return QStep(0,-1);
+//    return QStep(0, -1);
+//}
 
 static double qStepToDouble(const QStep& qStep)
 {
@@ -299,6 +301,60 @@ extern std::ostream& operator<<(std::ostream& os, const std::vector<QuantityInfo
 	}
 	os<<"]";
     return os;
+}
+
+/********************************************************************************
+ *
+ *
+ *
+ *
+ * QuantitiesSequence
+ *
+ *
+ *
+ *
+ *
+ ********************************************************************************/
+QuantitiesSequence::QuantitiesSequence(const std::vector<QuantityInfo>& qInfos)
+	: qInfos(qInfos),
+	  numVals(0)
+{
+	HuffmanTable table = getDefaultHuffmanTable();
+	for (const auto& i : qInfos) {
+		qMuls.push_back(qStepToDouble(i.qStep));
+		intCoders.push_back(shared_ptr<IntCoder>(getSizeIntCoder(table)));
+		intPredictors.push_back(shared_ptr<IntPredictor>(getIntPredictor(2, 0, 0)));
+		byteSinks.push_back(shared_ptr<ByteBufferSink>(new ByteBufferSink()));
+		bitSinks.push_back(BitSink(byteSinks.back()));
+	}
+}
+
+QuantitiesSequence::~QuantitiesSequence()
+{
+}
+
+void QuantitiesSequence::push(const std::vector<double>& quantities)
+{
+	for (unsigned n = 0; n < quantities.size(); ++n) {
+        int x = lround(quantities[n] * qMuls[n]);
+        intCoders[n]->code(bitSinks[n], x - intPredictors[n]->predict());
+        intPredictors[n]->update(x);
+	}
+}
+
+std::vector<uint8_t> QuantitiesSequence::getCode() const
+{
+	vector<uint8_t> code;
+	for (unsigned n = 0; n < qInfos.size(); ++n) {
+		//ToDo: why do I have to cast away const ness for intCoders[n]->flush, but not e.g. with the line
+		// "intCoders[n]->code(bitSinks[n], x - intPredictors[n]->predict());" ?
+		// Is this a stupid bug on my behalf!!
+		BitSink& bitSink = (BitSink&)bitSinks[n];
+		intCoders[n]->flush(bitSink);
+		const std::vector<uint8_t>& buf = byteSinks[n]->getBuf();
+		code.insert(code.end(), buf.begin(), buf.end());
+	}
+	return code;
 }
 
 } // namespace qs

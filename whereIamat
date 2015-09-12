@@ -1,0 +1,19 @@
+Where I am at
+-------------
+
+I am in qs_Quantity.cpp implementing QuantitiesSequence coder. It compiles, but I haven't tested it yet.
+It uses IntCoders and IntPredictors (and not a DoublesCoder) because that seemed easier to me tonight :-)
+
+To do:
+
+1. test coding works and have a look at the output
+2. write a decoder and test properly
+3. Add a quantity sequence (compressed) header.
+
+Note there is a weird compile problem with having to cast away constness on a bitSink:
+
+BitSink& bitSink = (BitSink&)bitSinks[n];
+intCoders[n]->flush(bitSink);
+
+that could be a stupid bug on my behalf.
+
