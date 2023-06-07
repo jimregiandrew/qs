@@ -1,11 +1,11 @@
-Vision
---------
+# Vision
+
 I want a standard file format for quantity sequence data that is understood by
 browsers, apps etc. Just like JPEG for photographic images, MPEG variants for
 videos, and mp3 etc for music.
 
-What is quantity sequence data ?
---------------------------------
+# What is quantity sequence data ?
+
 This is the best name I could come up with for data that is a function of time,
 or more generally is a sequence. Also known as time-series or digital data. The
 following are all a function of time, and are for some time period:
@@ -31,17 +31,19 @@ of my bus trip, or day).
 Wikipedia has a definition of quantity. This format is for any numeric or 
 enumerated data.
 
-Don't we have a file format for this already?
----------------------------------------------
-I don't know. I haven't found such a format that is widespread yet. The closest
-is HDF. From what I can see it is targeted at scientific data where precision
-and volume is important. I haven't investigated HDF much yet. What I want is to
-be able to store chunks of data in some DB, in a compact form, to access these 
-e.g. from a Browser, and have the Browser decode the data for me. Just like is 
-done with JPEG images.
+# Don't we have a file format for this already?
 
-What stage is the code here at?
-------------------------------
+I can't find any that satisfy the requirements. The closest is HDF. From what I can 
+see it is targeted at scientific data where precision and volume is important. It
+values precision over compressed size. I want to be able to trade them off. What 
+I want is to be able to store chunks of data that I can archive and share with 
+anyone - just like I can share a JPEG image with anyone. Longer term it would
+be great to have this format understood by browsers. e.g. Store data
+in a DB, in a compact form, access these from a Browser, and have the Browser
+decode the data for me. Just like is done with JPEG images.
+
+#What stage is the code here at?
+
 I am attempting a proof of concept. That is to write source code that quantizes
 (quantity sequence) data, and encodes/decodes it using a static (or optimized)
 Huffman code. If you know about compression then you will know this is 
@@ -56,8 +58,8 @@ not a lot of data to save for a record of a day.
 To do a proper standard for compression will take work from a lot of people or
 a few experts. I am not one.
 
-File format
------------
+# File format
+
 Initial idea (_ is a delimiter of diferent symbols):
 
 Nq_Nn_T0_QS0_QS1..QSN-1
@@ -71,8 +73,7 @@ Note: QSn can include quantity specifier, or have bitmask following e.g. Nq to
 indicate which of std, quantities are included. Have num. of non-std ones, 
 plus their definition following.
 
-Goal
-----
+# Goal
 
 To have a file format that:
 
