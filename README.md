@@ -1,6 +1,6 @@
 # Vision
 
-I want a standard file format for quantity sequence data that is understood by
+I want a standard file format for quantity sequence (e.g. time series) data that is understood by
 browsers, apps etc. Just like JPEG for photographic images, MPEG variants for
 videos, and mp3 etc for music.
 
